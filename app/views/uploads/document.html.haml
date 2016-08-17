@@ -1,0 +1,5 @@
+%h1.alert.alert-info Document
+.row
+  - @document.each do |doc|
+    %div
+      = link_to doc.name, doc.url

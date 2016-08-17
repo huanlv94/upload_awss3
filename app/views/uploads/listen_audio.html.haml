@@ -1,0 +1,8 @@
+%h1.alert.alert-info Audio uploaded
+.row
+  - @audio.each do |audio|
+    .col-md-12
+      %div
+        = link_to audio.name, audio.url
+      %audio{ :controls => 'controls'}
+        %source{:src => audio.url}

@@ -1,0 +1,89 @@
+%h5.alert.alert-info Upload video to AWS Edumall
+%form#fileupload{enctype: 'multipart/form-data', method: 'POST', data: @aws_signature.to_json}
+  .files-container.files
+  .row.fileupload-buttonbar
+    .col-lg-7
+      %span.btn.btn-success.fileinput-button
+        %i.fa.fa-plus
+        %span Add file
+        %input{:multiple => '', name: 'file', type: 'file'}
+      %button.btn.btn-primary.start{type: 'submit'}
+        %i.fa.fa-cloud-upload
+        %span Upload
+      %button.btn.btn-danger.cancel{type: 'reset'}
+        %i.fa.fa-close
+        %span Cancel
+        %span.fileupload-process
+    .col-lg-5.fileupload-progress.fade
+      .progress.progress-striped.active{'aria-valuemax' => '100', 'aria-valuemin' => '0', :role => 'progressbar'}
+        .progress-bar.progress-bar-success{:style => 'width:0%;'}
+      .progress-extended &nbsp;
+%script#template-upload{type: 'text/x-tmpl'}
+  {% for (var i=0, file; file=o.files[i]; i++) { %}
+  .col-sm-12.template-upload.fade
+    .col-sm-3
+      %span.preview
+    .col-sm-4
+      %p.item-name {%=file.name%}
+      %strong.error.text-danger
+    .col-sm-3
+      %p.size Processing...
+      .progress.progress-striped.active{'aria-valuemax' => '100', 'aria-valuemin' => '0', 'aria-valuenow' => '0', role: 'progressbar'}
+        .progress-bar.progress-bar-success{style: 'width:0%;'}
+    .col-sm-2.no-padding
+      {% if (!i && !o.options.autoUpload) { %}
+      %button.btn.btn-primary.start{disabled: ''}
+        %i.fa.fa-cloud-upload
+        %span= t('library.upload.upload')
+      {%  } %}
+      {% if (!i) { %}
+      %button.btn.btn-warning.cancel
+        %i.fa.fa-close
+        %span= t('library.upload.cancel')
+      {% } %}
+  {% } %}
+%script#template-download{type: 'text/x-tmpl'}
+  {% for (var i=0, file; file=o.files[i]; i++) { %}
+  .col-sm-12.template-download.fade
+    .col-sm-4
+      %span.preview
+        {% if (file.thumbnailUrl) { %}
+        %a{'data-gallery' => '', download: '{%=file.name%}', href: '{%=file.url%}', :title => '{%=file.name%}'}
+          %img{src: '{%=file.thumbnailUrl%}'}
+        {% } %}
+        {% if (file.preview) { %}
+        %video{controls: '', name: 'media'}
+          %source{src: '{%=file.preview.currentSrc%}', type: 'video/mp4'}
+        {% } %}
+    .col-sm-5
+      %p.item-name
+        {% if (file.url) { %}
+        <a href='{%=file.url%}' title='{%=file.name%}' download='{%=file.name%}' {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}
+        {% } else { %}
+        %span {%=file.name%}
+        {% } %}
+      {% if (file.type.indexOf('video') != -1) { %}
+      .state-shower{'data-source' => '{%= file.name %}'}
+        .progress
+          .progress-bar.progressing{'aria-valuemax' => '100', 'aria-valuemin' => '0', 'aria-valuenow' => '100', role: 'progressbar'} PROGRESSING
+        .state-content
+      {% } else { %}
+      .state-shower{'data-source' => '{%= file.name %}'}
+        .progress
+          .progress-bar.completed{'aria-valuemax' => '100', 'aria-valuemin' => '0', 'aria-valuenow' => '100', role: 'progressbar'} COMPLETED
+        .state-content
+      {% } %}
+    .col-sm-2
+      %span.size {%=o.formatFileSize(file.size)%}
+    .col-sm-1.no-padding
+      {% if (file.deleteUrl) { %}
+      <button class='btn btn-danger delete' data-type='{%=file.deleteType%}' data-url='{%=file.deleteUrl%}'{% if (file.deleteWithCredentials) { %} data-xhr-fields='{'withCredentials':true}'{% } %}>
+      %i.glyphicon.glyphicon-trash
+      %span Delete
+      %input.toggle{name: 'delete', type: 'checkbox', value: '1'}
+        {% } else { %}
+        %button.btn.btn-warning.cancel
+          %i.fa.fa-close
+          %span Clear
+        {% } %}
+  {% } %}

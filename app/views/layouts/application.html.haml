@@ -1,0 +1,33 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title UploadAws
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  %body
+    %nav.navbar.navbar-default
+      .container
+        .navbar-header
+          %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li.active
+              %a{:href => "/"}
+                Upload
+                %span.sr-only (current)
+            %li
+              %a{:href => "/uploads"} Video đã upload
+            %li
+              %a{:href => "/uploads/image"} Image đã upload
+            %li
+              %a{:href => "/uploads/audio"} Audio đã upload
+            %li
+              %a{:href => "/uploads/document"} Document đã upload
+    .container
+      = yield

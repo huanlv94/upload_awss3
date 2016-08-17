@@ -1,0 +1,7 @@
+%h1.alert.alert-info Image uploaded
+.row
+  - @image.each do |image|
+    .col-md-4
+      %div
+        = link_to image.name, image.url
+      %img.img-thumbnail{:alt => image.name, :height => "236", :src => image.url, :width => "304"}
