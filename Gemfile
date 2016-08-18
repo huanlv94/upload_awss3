@@ -47,6 +47,11 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry'
   gem 'rubocop'
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rbenv'
+  gem 'capistrano3-puma'
 end
 
 group :development do
