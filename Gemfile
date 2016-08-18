@@ -40,7 +40,7 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 gem 'font-awesome-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
+gem 'whenever', '~> 0.9.4'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -52,6 +52,8 @@ group :development, :test do
   gem 'capistrano-bundler'
   gem 'capistrano-rbenv'
   gem 'capistrano3-puma'
+  # gem 'capistrano-rvm'
+  gem 'capistrano3-unicorn'
 end
 
 group :development do
