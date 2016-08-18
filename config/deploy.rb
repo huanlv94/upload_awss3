@@ -5,7 +5,7 @@ set :application, 'upload_aws'
 set :repo_url, 'git@github.com:lehuan94cntt/upload_awss3_edumall.git'
 set :rbenv_ruby, '2.2.2'
 set :rbenv_path, '/home/thanhnv/.rbenv'
-set :deploy_to, '/home/thanhnv/upload_aws'
+set :deploy_to, '/home/thanhnv/rails'
 set :scm, :git
 set :puma_pid, "#{shared_path}/pids/puma.pid"
 set :puma_bind, "unix://#{shared_path}/sockets/puma.sock"
@@ -24,10 +24,10 @@ set :puma_init_active_record, false
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-# set :log_level, :debug
+set :log_level, :debug
 
 # Default value for :pty is false
-# set :pty, true
+set :pty, true
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push('config/mongoid.yml', 'config/secrets.yml')
@@ -43,38 +43,38 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'pids', 'tmp/cache', 'sock
 set :keep_releases, 2
 
 
-namespace :deploy do
-  desc "Make sure local git is in sync with remote."
-  task :check_revision do
-    on roles(:app) do
-      unless `git rev-parse HEAD` == `git rev-parse origin/master`
-        puts "WARNING: HEAD is not the same as origin/master"
-        puts "Run `git push` to sync changes."
-        exit
-      end
-    end
-  end
+# namespace :deploy do
+#   desc "Make sure local git is in sync with remote."
+#   task :check_revision do
+#     on roles(:app) do
+#       # unless `git rev-parse HEAD` == `git rev-parse origin/master`
+#       #   puts "WARNING: HEAD is not the same as origin/master"
+#       #   puts "Run `git push` to sync changes."
+#       #   exit
+#       # end
+#     end
+#   end
 
-  desc 'Initial Deploy'
-  task :initial do
-    on roles(:app) do
-      before 'deploy:restart', 'puma:start'
-      invoke 'deploy'
-    end
-  end
+#   desc 'Initial Deploy'
+#   task :initial do
+#     on roles(:app) do
+#       before 'deploy:restart', 'puma:start'
+#       invoke 'deploy'
+#     end
+#   end
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke 'puma:restart'
-    end
-  end
+#   desc 'Restart application'
+#   task :restart do
+#     on roles(:app), in: :sequence, wait: 5 do
+#       invoke 'puma:restart'
+#     end
+#   end
 
-  before :starting,     :check_revision
-  after  :finishing,    :compile_assets
-  after  :finishing,    :cleanup
-  after  :finishing,    :restart
-end
+#   before :starting,     :check_revision
+#   after  :finishing,    :compile_assets
+#   after  :finishing,    :cleanup
+#   after  :finishing,    :restart
+# end
 
 # ps aux | grep puma    # Get puma pid
 # kill -s SIGUSR2 pid   # Restart puma
