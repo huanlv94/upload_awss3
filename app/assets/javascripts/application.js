@@ -15,8 +15,10 @@ $(document).ready(function () {
       data: params, // send the file name to the server so it can generate the key param
       async: false,
       success: function(data) {
+        console.log('Upload success, wait transcoder.');
       },
       fail: function(e, data) {
+        console.log('Fail !');
       }
     })
   }

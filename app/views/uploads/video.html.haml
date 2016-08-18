@@ -1,0 +1,7 @@
+%h1.alert.alert-info All uploads
+.row
+  - @uploads.each do |upload|
+    .col-md-6
+      %div
+        = link_to upload.name, upload.url
+      %video{:controls => "controls", :height => "100%", :poster => upload.thumbnail, :preload => "true", :width => "100%", :src => upload.url}

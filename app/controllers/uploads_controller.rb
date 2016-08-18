@@ -1,5 +1,8 @@
 class UploadsController < ApplicationController
   require 'aws-sdk'
+  before_action :validate_create_job, only: %w(create)
+  before_action :validate_update_job, only: %w(update_job)
+
   def new
     @aws_signature = AwsServices.generate_signature
   end
@@ -12,7 +15,7 @@ class UploadsController < ApplicationController
     job_id = ''
     job_id = create_job(aws[:key]).id if aws[:bucket] == BUCKET_VIDEO
 
-    uploader = Upload.create(aws)
+    uploader = Upload.create(job_id,aws)
 
     if uploader.save
       render json: { success: true, message: 'success!' }
@@ -21,8 +24,34 @@ class UploadsController < ApplicationController
     end
   end
 
+  def fake_broadcast
+    user_upload = 'huanlv'
+    job = Upload.first
+
+    TranscodingJob.perform_now(user_upload, job.as_json)
+
+    render text: ''
+  end
+
+  def update_job
+    data = {
+      status: @message['status'],
+      job_id: @message['jobId'],
+      duration: @message['outputs'][0]['duration'],
+      message: @message['outputs'][0]['statusDetail'],
+      sns_message_id: @sns['MessageId'],
+      subject: @sns['Subject']
+    }
+    Upload.update_job(data)
+
+    render text: '', status: 200
+  end
+
   def index
     @aws_signature = AwsServices.generate_signature
+  end
+
+  def video
     @uploads = Upload.where(:type => 'video')
   end
 
@@ -91,8 +120,9 @@ class UploadsController < ApplicationController
 
     condition = {}
     condition[:type] = session[:media] unless session[:media] == 'all'
+    condition[:status.in] = %w(COMPLETED, WARNING)
 
-    fields = [:name, :thumbnail, :url, :created_at, :type]
+    fields = [:name, :thumbnail, :url, :created_at, :type, :status]
     Upload.where(condition).only(fields).desc(:created_at)
   end
 

@@ -1,5 +1,6 @@
 %h5.alert.alert-info Upload video to AWS Edumall
 %form#fileupload{enctype: 'multipart/form-data', method: 'POST', data: @aws_signature.to_json}
+  #dropzone.fade.well Drop files here...
   .files-container.files
   .row.fileupload-buttonbar
     .col-lg-7
@@ -12,7 +13,7 @@
         %span Upload
       %button.btn.btn-danger.cancel{type: 'reset'}
         %i.fa.fa-close
-        %span Cancel
+        %span Delete
         %span.fileupload-process
     .col-lg-5.fileupload-progress.fade
       .progress.progress-striped.active{'aria-valuemax' => '100', 'aria-valuemin' => '0', :role => 'progressbar'}
@@ -34,12 +35,12 @@
       {% if (!i && !o.options.autoUpload) { %}
       %button.btn.btn-primary.start{disabled: ''}
         %i.fa.fa-cloud-upload
-        %span= t('library.upload.upload')
+        %span Upload
       {%  } %}
       {% if (!i) { %}
       %button.btn.btn-warning.cancel
         %i.fa.fa-close
-        %span= t('library.upload.cancel')
+        %span Delete
       {% } %}
   {% } %}
 %script#template-download{type: 'text/x-tmpl'}
